@@ -31,7 +31,7 @@ module FIFO(input clk, rst, wr, rd,
     end
 
   assign empty=(cnt==0)?1'b1:1'b0;
-  assign empty=(cnt==1)?1'b1:1'b0;
+  assign full=(cnt==16)?1'b1:1'b0;
 
 endmodule
 
