@@ -60,7 +60,7 @@ endclass
       fif.data_in <= 0;
       repeat (5) @(posedge fif.clock);
       fif.rst <=1'b0;
-      $display("Drv: set to reet");
+      $display("Drv: set to reetDUT reset done");
       $display("----------------------------------------------------------");    
     endtask
 
@@ -85,7 +85,7 @@ endclass
       fif.wr <= 1'b0;
       @(posedge fif.clock);
       fif.rd <= 1'b0;
-      $display("DRV: data write");
+      $display("DRV: data read");
       @(posedge fif.clock);
     endtask
 
@@ -127,7 +127,7 @@ class monitor;
       tr.data_out=fif.data_out;
       mbx.put(tr);
 
-      $display("[mon]");
+      $display("[MON] : Wr:%0d rd:%0d din:%0d dout:%0d full:%0d empty:%0d", tr.wr, tr.rd, tr.data_in, tr.data_out, tr.full, tr.empty);
       
     end
   endtask
@@ -151,15 +151,15 @@ class scoreboard;
   task run();
    forever begin
      mbx.get(tr);
-     $display("sco");
+     $display("[SCO] : Wr:%0d rd:%0d din:%0d dout:%0d full:%0d empty:%0d", tr.wr, tr.rd, tr.data_in, tr.data_out, tr.full, tr.empty);
 
      if(tr.wr==1'b1)begin
        if(tr.full==1'b0)begin
          din.push_front(tr.data_in);
-         $display("sco: data stored");
+         $display("[SCO] : DATA STORED IN QUEUE :%0d", tr.data_in);
        end
        else begin
-         $display("fifo full");
+         $display("[sco]:fifo full");
        end
      end
 
@@ -174,10 +174,12 @@ class scoreboard;
          end
        end
        else begin
-         $display("------------------------------------------------------");
+         $display("[SCO] : FIFO IS EMPTY");
+         //$display("------------------------------------------------------");
        end
-       ->next;
+      $display("------------------------------------------------------");
      end
+      ->next;
    end
           
   endtask
