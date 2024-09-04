@@ -133,7 +133,7 @@ class monitor;
   endtask
   
 endclass
-
+////////////////////////////////////////////////////
 class scoreboard;
   
   mailbox #(transaction)mbx;
@@ -166,7 +166,7 @@ class scoreboard;
      if(tr.rd==1'b1)begin
        if(tr.empty==1'b0)begin
          temp=din.pop_back();
-         if(tr.data_out===temp)
+         if(tr.data_out==temp)
            $display("Scp: data match");
          else begin
            $error("sco: data mismatch");
