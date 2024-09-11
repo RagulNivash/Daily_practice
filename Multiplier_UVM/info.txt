@@ -1,1 +1,1 @@
-
+Here, I have designed a 4x4 multiplier and wrote a UVM_tb
