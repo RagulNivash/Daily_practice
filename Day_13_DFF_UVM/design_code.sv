@@ -1,7 +1,7 @@
-module dff(input rst, clk,din, output dout);
+module dff(input clk, rst, din, output reg dout);
 
   always @(posedge clk) begin
-    if(rst==1'b1)
+    if(rst)
       dout<=1'b0;
     else dout<= din;      
   end
@@ -10,15 +10,12 @@ endmodule
 
 ///////////////////////////////////////////
 
-interface fif;
+interface dff_if;
 
-logic rst;
+  logic rst;
   logic din;
   logic dout;
   logic clk;
 
 
 endinterface
-
-
-
