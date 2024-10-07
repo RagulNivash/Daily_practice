@@ -38,3 +38,26 @@ create_supply_net Vint -domain PD_video -reuse
 connect_supply_net VDD_H -ports VDD_H
 connect-supply_net Vint -porst Vint
 /////////////////////////////////////////////////////////////////////////////////////
+
+#supply sets
+
+create_supply_set SS_1\
+-function {power}\
+-function {ground}\
+-function {nwell}
+
+set_isolation isolation_cpu_op -domain PD_cpu
+            -applies_to outputs
+
+
+/////////////////////////////////////////////////////////////
+#power switch
+
+set  pg_en dut.pmu.pg_en
+create_power_switch psw_vdd_h_gated -domain pd_cpu\
+-output_supply_port "VCCOUT Vdd_h_gated"
+-input_supply_portm "VCCIN Vdd_h"
+-on_state "ON VCCIN EN"
+-off_state "OFF !EN"
+-control_port "EN $pg-en"
+ 
