@@ -61,3 +61,22 @@ create_power_switch psw_vdd_h_gated -domain pd_cpu\
 -off_state "OFF !EN"
 -control_port "EN $pg-en"
  
+//////////////////////////////////////////////////////////////////////////////
+#power state table
+
+add_port_state VDD_C -state {c_on 1.0}\
+-state{c_off off}
+
+add_port_state vdd_v -state{v_on 1.2}\
+-state {v_off off}
+
+add_port_state vdd_d -state{d_on 0.8}\
+-state{d_off off}
+
+create_pst TOP_PST -supplies{VDD_C VDD_V VDD_D}
+add_pst_state ALLOFF -pst TOP_PST -state{c_off V_OFF D_OFF}
+add_pst_state LOWP_1 -pst TOP_PST -state{C_ON V_OFF D_OFF}
+add_pst_state LowP2 -pst TOP_PST -state{C_ON V_ON D_OFF}
+add_pst_state ALL_ON -pst TOP_PST -state{C_ON V_ON D_ON}
+
+///////////////////////////////////////////////////////////////////////////////////////////
