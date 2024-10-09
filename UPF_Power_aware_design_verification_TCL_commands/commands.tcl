@@ -80,3 +80,24 @@ add_pst_state LowP2 -pst TOP_PST -state{C_ON V_ON D_OFF}
 add_pst_state ALL_ON -pst TOP_PST -state{C_ON V_ON D_ON}
 
 ///////////////////////////////////////////////////////////////////////////////////////////
+#Level Shifters
+set_level_shifter LS_CPU_VIDEO\
+-domain PD_CPU\
+-applies_to outputs\
+-location self
+
+//////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
