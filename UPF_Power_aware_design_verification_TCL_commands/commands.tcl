@@ -88,9 +88,30 @@ set_level_shifter LS_CPU_VIDEO\
 
 //////////////////////////////////////////////////////////////////////////////////
 
+#isolation cells
+
+set_isolation iso_cpu_video\
+-domain <domain_name>\
+-applies_to outputs
+-clamp_value <0\1\latch\z>\
+-isolation_signal <isolation_enable>\
+-isolation_sense low\high
+-location self
+
+set_isolation_control iso_cpu_video\
+-isolation_signal<>\
+-isolation_sense<>\
+-location self
 
 
+set_isolation iso_cpu_video\
+-domain<>
+-clmap_value 0\
+-isolation_signal<>\
+-isolation_sense low
+-elements {list of elements}
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
