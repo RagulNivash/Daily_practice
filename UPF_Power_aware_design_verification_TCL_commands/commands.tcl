@@ -116,12 +116,32 @@ set_isolation iso_cpu_video\
 -excluse_elements{}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#retention cell
+
+set_retention retain_a_b\
+-domain PD-a\
+-retention_power_net<on>\
+-retention_ground_net vss\
+-elements{}
 
 
+set_retention_control retain_a_b\
+-domain PD_a\
+-save_signal{}\
+-restore_signal{}
 
 
+/////////////////////////////////////////////////////////////////////////
+#flat vs heirarchy
 
+load_upf cpu.upf -scope cpu
+load_upf video.upf -scope video
 
+set_scope cpu
+create_power_domain <>
+load_upf bf.upf -scope b1
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
