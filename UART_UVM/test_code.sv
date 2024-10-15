@@ -18,15 +18,15 @@ typedef enum bit[3:0] {rand_baud_1_stop=0,rand_length_1_stop=1, length5wp=2, len
 class transaction extends uvm_sequence_item;
   `uvm_object_utils(transaction)
 
-rand oper mode op;
+	rand oper_mode op;
   logic tx_start, rx_start;
   logic rst;
   rand logic [16:0] baud;
   rand logic [7:0]tx_data;
-  rand logic[3:0] length
+  rand logic[3:0] length;
   rand logic parity_type, parity_en;
-  logic_stop2;
-  logic t-done, rx_done, tx-err, rx_err;
+  logic stop2;
+  logic t_done, rx_done, tx_err, rx_err;
   logic [7:0] rx_out;
 
 
@@ -57,14 +57,14 @@ class rand_baud extends uvm_sequence#(transaction);
   virtual task body();
     repeat(5)
       begin
-        tr= transaction::type_ide::create("tr");
+        tr= transaction::type_id::create("tr");
         start_item(tr);
         assert(tr.randomize);
         tr.op=rand_baud_1_stop;
         tr.length=8;
         tr.baud=9600;
         tr.rst=1'b0;
-        tr.tx_sstart=1'b1;
+        tr.tx_start=1'b1;
         tr.rx_start=1'b1;
         tr.parity_en=1'b1;
         tr.stop2=1'b0;
@@ -358,14 +358,14 @@ class driver extends uvm_driver#(transaction);
   transaction tr;
 
 
-  function new (input string path ="drv", uvm_compoent parent=null);
+  function new (input string path ="drv", uvm_component parent=null);
     super.new(path, parent);
   endfunction
 
 
   virtual function void build_phase(uvm_phase phase);
     super.build_phase(phase);
-    tr=transactio::type_id::create("tr");
+    tr=transaction::type_id::create("tr");
     if(!uvm_config_db#(virtual uart_if)::get(this,"","vif",vif))
       `uvm_error("drv","unable to access interface");
     
@@ -394,7 +394,7 @@ class driver extends uvm_driver#(transaction);
     reset_dut();
     forever begin
       seq_item_port.get_next_item(tr);
-      vif.rst <= 1''b0;
+      vif.rst <= 1'b0;
       vif.tx_start <= tr.tx_start;
       vif.rx_start    <= tr.rx_start;
       vif.tx_data     <= tr.tx_data;
@@ -403,7 +403,7 @@ class driver extends uvm_driver#(transaction);
       vif.parity_type <= tr.parity_type;
       vif.parity_en   <= tr.parity_en;
       vif.stop2       <= tr.stop2;
-      `uvm_info("DRV", $sformat("BAUD:%0d Len: %0d PAR_T:%0d PAR_EN:%0d STOP:%0d TX_DATA:%0d", tr.baud, tr.length, tr.parity_type, tr.parity_en, tr.stop2,tr.tx_data), UVM_NONE);
+      `uvm_info("DRV", $sformatf("BAUD:%0d Len: %0d PAR_T:%0d PAR_EN:%0d STOP:%0d TX_DATA:%0d", tr.baud, tr.length, tr.parity_type, tr.parity_en, tr.stop2,tr.tx_data), UVM_NONE);
        @(posedge vif.clk);
        @(posedge vif.tx_done);
        @(negedge vif.rx_done);
@@ -427,7 +427,7 @@ class mon extends uvm_monitor;
   transaction tr;
   virtual uart_if vif;
 
-  function new(input string inst="mon", uvvm_component parent=null);
+  function new(input string inst="mon", uvm_component parent=null);
     super.new(inst, parent);
   endfunction
 
@@ -471,7 +471,7 @@ forever begin
 end
 
   endtask
-  endfunction
+//  endfunction
 
 
 endclass
@@ -480,7 +480,7 @@ class sco extends uvm_scoreboard;
   `uvm_component_utils(sco)
 
   uvm_analysis_imp#(transaction,sco)recv;
-  bit [31:0] arr[32]=`{default:0};
+  bit [31:0] arr[32]='{default:0};
   bit [31:0] addr =0;
   bit [31:0] data_rd =0;
 
@@ -489,7 +489,7 @@ class sco extends uvm_scoreboard;
   endfunction
 
   virtual function void write (transaction tr);
-    `uvm_info("sco",$sformat("BAUD:%0d LEN:%0d PAR_T:%0d PAR_EN:%0d STOP:%0d TX_DATA:%0d RX_DATA:%0d", tr.baud, tr.length, tr.parity_type, tr.parity_en, tr.stop2, tr.tx_data, tr.rx_out), UVM_NONE);
+    `uvm_info("sco",$sformatf("BAUD:%0d LEN:%0d PAR_T:%0d PAR_EN:%0d STOP:%0d TX_DATA:%0d RX_DATA:%0d", tr.baud, tr.length, tr.parity_type, tr.parity_en, tr.stop2, tr.tx_data, tr.rx_out), UVM_NONE);
     if(tr.rst==1'b1)
       `uvm_info("sco","system reset",UVM_NONE)
       else if(tr.tx_data == tr.rx_out)
@@ -625,7 +625,7 @@ module tb;
 
   uart_top dut(.clk(vif.clk),.rst(vif.rst),.tx_start(vif.tx_start),.rx_start(vif.rx_start),.tx_data(vif.tx_data),.baud(vif.baud),.length(vif.length),.parity_type(vif.parity_type),.parity_en(vif.parity_en),.stop2(vif.stop2),.tx_done(vif.tx_done),.rx_done(vif.rx_done),.tx_err(vif.tx_err),.rx_err(vif.rx_err),.rx_out(vif.rx_out));
   
-  intial begin
+  initial begin
 vif.clk <= 0;
     
   end
@@ -634,13 +634,13 @@ vif.clk <= 0;
 
 
 
-  inital begin
+  initial begin
     uvm_config_db#(virtual uart_if)::set(null,"*","vif",vif);
     run_test("test");
 
   end
 
-  inital begin
+  initial begin
     $dumpfile("dump.vcd");
     $dumpvars;
   end
