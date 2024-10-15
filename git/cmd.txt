@@ -1,0 +1,117 @@
+git config --global user.name "Ragul"
+git config --global core.editor "coded --wait"
+git congif --global -e
+
+code
+
+//////////////////////   \r\n  carriage return, fee
+
+git config --global core.autocrlf input
+
+git config --help
+
+////////////////////
+
+git init   //////rm -rf .git
+
+
+git add file.txt ////can be used for delation as well
+git commit -m "initla commit"
+
+
+echo hello >file1.txt
+echo hello > file2.txt
+
+git status
+
+git add file.txt file2.txt
+git add *.txt
+git add .
+
+git commit 
+
+////////////////////// with staging
+
+git commit -am "fixed the bug"
+
+rm file2.txt
+git add file2.txt
+git commit file2.txt
+
+git rm file2.txt *.txt
+
+mv file1.txt main.js
+git add file.txt
+git add main.js
+git mv main.js file.js
+git commit -m "refractor code"
+
+////////////////////////////
+
+mkdir logsecho hello> logs/dev.log
+git status  //status of the working directory and staging area
+
+////////////////not to  add in the staging area
+echo logs/> .gitignore
+
+code .gitignore
+git add .gitignore
+git commit -m "Add gitignore"
+
+git ls-files  ///staging area
+
+git rm  /////removes from both working directory and stagin area
+
+git rm --cached -r 'bin/'  ////////////////remove only from staging or index area
+
+git ls-files
+git commit -m "Remove bin directory that was accidently commited"
+
+ //////////////////////
+
+git status -s ////short status output
+
+///////////// to see extact code that is chaged in staging area
+
+git diff --staged
+
+////////////// changes in the workingg directory that is not staged yet
+
+git diff 
+
+/////////////////visual tools to compare files KDiff3 P4Merge WinMerge VSCode
+
+git config --global diff.tool vscode
+git config --global difftoll.vscode.cmd "code --wait --diff $LOCAL $REMOTE"
+git config --global -e
+
+
+git difftool 
+git difftool -staged
+
+////////////////////////////////////////////////////////////////////////////
+
+git log //////////commit history
+
+git log --oneline --reverse
+
+/////viewing the commit///////
+
+git show
+git show d601b90
+git show HEAD
+git show HEAD~1
+git show HEA~1:.gitignore
+
+git ls-tree HEAD~1
+
+//////////// Commits Blobs (Files) Trees (Directories) Tags /////////////
+  
+  
+git add file1.txt
+
+git reset --hard
+           --soft
+git restore --staged file1.js 
+                        
+
